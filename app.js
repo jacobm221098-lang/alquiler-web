@@ -1,74 +1,64 @@
 // ============================================================
-//  CATEGORÍAS (investigadas para Costa Rica)
-//  "todas" es un filtro especial que muestra todo.
+//  CATEGORÍAS por momento del corredor
 // ============================================================
 const CATEGORIAS = [
-  { id: "todas",       nombre: "Todo",          icono: "🏷️" },
-  { id: "propiedades", nombre: "Propiedades",   icono: "🏠" },
-  { id: "vehiculos",   nombre: "Vehículos",     icono: "🚗" },
-  { id: "maquinaria",  nombre: "Maquinaria",    icono: "🏗️" },
-  { id: "eventos",     nombre: "Eventos",       icono: "🎉" },
-  { id: "herramientas",nombre: "Herramientas",  icono: "🔧" },
+  { id: "todos",        nombre: "Todos",         icono: "🥤" },
+  { id: "pre-run",      nombre: "Pre-Run",       icono: "⚡" },
+  { id: "recuperacion", nombre: "Recuperación",  icono: "🔥" },
+  { id: "defensas",     nombre: "Defensas",      icono: "🛡️" },
+  { id: "electrolitos", nombre: "Anti-calambres",icono: "🧂" },
 ];
 
+// Etiquetas lindas para mostrar la categoría en la tarjeta
+const NOMBRE_CAT = {
+  "pre-run": "Pre-Run", "recuperacion": "Recuperación",
+  "defensas": "Defensas", "electrolitos": "Anti-calambres",
+};
+
+// Tu número de WhatsApp (cámbialo por el real, con código país 506)
+const WHATSAPP = "50600000000";
+
 // ============================================================
-//  ÍTEMS EN ALQUILER
-//  Un solo array para TODAS las categorías. Cada ítem dice su
-//  categoria, su precio con su unidad (/mes, /día) y una lista
-//  de "specs" (datos importantes) que varían según el tipo.
+//  PRODUCTOS (shots de 60 ml). Precios en colones (₡).
+//  Fuente de verdad: para agregar/quitar shots, tocás solo esto.
 // ============================================================
 const items = [
-  // --- Propiedades (precio por mes) ---
-  { categoria: "propiedades", titulo: "Apartamento moderno con balcón", provincia: "San José", canton: "Escazú", precio: 850, unidad: "mes", specs: ["🛏 2 hab", "🛁 2 baños", "📐 85 m²"], foto: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&q=80", contacto: "https://wa.me/50600000000" },
-  { categoria: "propiedades", titulo: "Casa familiar con jardín", provincia: "San José", canton: "Santa Ana", precio: 1300, unidad: "mes", specs: ["🛏 3 hab", "🛁 3 baños", "📐 160 m²"], foto: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&q=80", contacto: "https://wa.me/50600000000" },
-  { categoria: "propiedades", titulo: "Local comercial en avenida central", provincia: "San José", canton: "San José", precio: 1600, unidad: "mes", specs: ["📐 120 m²", "🚻 2 baños", "🅿️ Parqueo"], foto: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80", contacto: "https://wa.me/50600000000" },
-  { categoria: "propiedades", titulo: "Bodega industrial en El Coyol", provincia: "Alajuela", canton: "Alajuela", precio: 2100, unidad: "mes", specs: ["📐 400 m²", "🚛 Carga pesada", "🏭 Uso industrial"], foto: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&q=80", contacto: "https://wa.me/50600000000" },
+  { categoria: "pre-run", nombre: "Boost Salida", desc: "Cafeína natural + guaraná para arrancar con todo.", precio: 2500, ingredientes: ["☕ Cafeína", "🌿 Guaraná", "🍋 Limón"], foto: "https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=600&q=80" },
+  { categoria: "pre-run", nombre: "Remolacha Power", desc: "Remolacha para resistencia y oxígeno en las piernas.", precio: 2800, ingredientes: ["🫐 Remolacha", "🍎 Manzana", "🫚 Jengibre"], foto: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=600&q=80" },
+  { categoria: "pre-run", nombre: "Matcha Run", desc: "Energía estable sin bajón, con matcha verde.", precio: 3000, ingredientes: ["🍵 Matcha", "🍏 Manzana verde", "🍯 Miel"], foto: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&q=80" },
 
-  // --- Vehículos (precio por día) ---
-  { categoria: "vehiculos", titulo: "Toyota Rush 4x4", provincia: "Guanacaste", canton: "Liberia", precio: 55, unidad: "día", specs: ["👥 5 pasajeros", "⚙️ Automático", "🏔 4x4"], foto: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&q=80", contacto: "https://wa.me/50600000000" },
-  { categoria: "vehiculos", titulo: "Microbús Hyundai H1", provincia: "San José", canton: "San José", precio: 90, unidad: "día", specs: ["👥 12 pasajeros", "⚙️ Manual", "🧳 Equipaje amplio"], foto: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600&q=80", contacto: "https://wa.me/50600000000" },
-  { categoria: "vehiculos", titulo: "Moto Honda XR 150", provincia: "Puntarenas", canton: "Garabito", precio: 25, unidad: "día", specs: ["🏍 150cc", "⛽ Bajo consumo", "🪖 Incluye casco"], foto: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=600&q=80", contacto: "https://wa.me/50600000000" },
+  { categoria: "recuperacion", nombre: "Recovery Cúrcuma", desc: "Cúrcuma + pimienta negra, antiinflamatorio post-carrera.", precio: 2700, ingredientes: ["🟡 Cúrcuma", "🌶 Pimienta negra", "🍊 Naranja"], foto: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=600&q=80" },
+  { categoria: "recuperacion", nombre: "Cherry Repair", desc: "Cereza ácida, clásica para recuperación muscular.", precio: 3200, ingredientes: ["🍒 Cereza ácida", "🫐 Arándano"], foto: "https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?w=600&q=80" },
+  { categoria: "recuperacion", nombre: "Proti-Shot", desc: "Proteína ligera para después del entreno.", precio: 3500, ingredientes: ["🥛 Proteína", "🍌 Banano", "🍯 Miel"], foto: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=600&q=80" },
 
-  // --- Maquinaria y construcción (precio por día) ---
-  { categoria: "maquinaria", titulo: "Generador eléctrico 5kW", provincia: "Cartago", canton: "Cartago", precio: 40, unidad: "día", specs: ["⚡ 5000W", "⛽ Diésel", "🔌 110/220V"], foto: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=600&q=80", contacto: "https://wa.me/50600000000" },
-  { categoria: "maquinaria", titulo: "Compactadora de suelo (brinca)", provincia: "Alajuela", canton: "San Carlos", precio: 35, unidad: "día", specs: ["🪨 Compactación", "⛽ Gasolina", "🏗 Obra"], foto: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=600&q=80", contacto: "https://wa.me/50600000000" },
-  { categoria: "maquinaria", titulo: "Montacargas 2.5 ton", provincia: "Heredia", canton: "Heredia", precio: 120, unidad: "día", specs: ["🏋️ 2.5 toneladas", "🔧 Operador aparte", "📦 Bodega"], foto: "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=600&q=80", contacto: "https://wa.me/50600000000" },
+  { categoria: "defensas", nombre: "Jengibre Escudo", desc: "Jengibre + limón para las defensas del día a día.", precio: 2200, ingredientes: ["🫚 Jengibre", "🍋 Limón", "🌶 Pimienta"], foto: "https://images.unsplash.com/photo-1606168094336-48f205227abd?w=600&q=80" },
+  { categoria: "defensas", nombre: "Citrus C", desc: "Golpe de vitamina C con naranja y acerola.", precio: 2400, ingredientes: ["🍊 Naranja", "🍒 Acerola", "🥕 Zanahoria"], foto: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=600&q=80" },
+  { categoria: "defensas", nombre: "Verde Vital", desc: "Clorofila y apio para limpiar y sostener energía.", precio: 2600, ingredientes: ["🥬 Apio", "🥒 Pepino", "🍏 Manzana"], foto: "https://images.unsplash.com/photo-1610970881699-44a5587cab4a?w=600&q=80" },
 
-  // --- Eventos (precio por día) ---
-  { categoria: "eventos", titulo: "Toldo 6x6 para eventos", provincia: "San José", canton: "Desamparados", precio: 80, unidad: "día", specs: ["⛺ 6x6 m", "🌧 Impermeable", "🔨 Montaje incluido"], foto: "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80", contacto: "https://wa.me/50600000000" },
-  { categoria: "eventos", titulo: "Equipo de sonido profesional", provincia: "San José", canton: "Curridabat", precio: 110, unidad: "día", specs: ["🔊 2 bafles", "🎤 2 micrófonos", "🎚 Consola"], foto: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&q=80", contacto: "https://wa.me/50600000000" },
-  { categoria: "eventos", titulo: "Sillas y mesas (paquete 50)", provincia: "Heredia", canton: "Belén", precio: 60, unidad: "día", specs: ["🪑 50 sillas", "🍽 10 mesas", "🚚 Entrega"], foto: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&q=80", contacto: "https://wa.me/50600000000" },
-
-  // --- Herramientas (precio por día) ---
-  { categoria: "herramientas", titulo: "Andamio tubular (módulo)", provincia: "Cartago", canton: "La Unión", precio: 15, unidad: "día", specs: ["🧱 2m altura", "🔩 Apilable", "🏗 Construcción"], foto: "https://images.unsplash.com/photo-1590241899751-5a0f8f7a2d8f?w=600&q=80", contacto: "https://wa.me/50600000000" },
-  { categoria: "herramientas", titulo: "Taladro rotomartillo industrial", provincia: "Alajuela", canton: "Alajuela", precio: 12, unidad: "día", specs: ["🔩 SDS-Plus", "⚡ 800W", "🧰 Maletín"], foto: "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=600&q=80", contacto: "https://wa.me/50600000000" },
+  { categoria: "electrolitos", nombre: "Sal & Agua", desc: "Electrolitos clave para evitar calambres en el calor tico.", precio: 2300, ingredientes: ["🧂 Sodio", "🍌 Potasio", "⚡ Magnesio"], foto: "https://images.unsplash.com/photo-1559839914-17aae19cec71?w=600&q=80" },
+  { categoria: "electrolitos", nombre: "Coco Hidrata", desc: "Agua de coco natural, hidratación y potasio.", precio: 2500, ingredientes: ["🥥 Agua de coco", "🍋 Limón", "🧂 Sal marina"], foto: "https://images.unsplash.com/photo-1536759808958-2cb1a02def0e?w=600&q=80" },
+  { categoria: "electrolitos", nombre: "Trópico Salino", desc: "Piña y maracuyá con electrolitos para distancias largas.", precio: 2700, ingredientes: ["🍍 Piña", "🌺 Maracuyá", "⚡ Electrolitos"], foto: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=600&q=80" },
 ];
 
-// Provincias de CR (para el filtro)
-const PROVINCIAS = ["San José", "Alajuela", "Cartago", "Heredia", "Guanacaste", "Puntarenas", "Limón"];
-
 // ============================================================
-//  REFERENCIAS AL DOM
+//  DOM
 // ============================================================
 const navCategorias = document.getElementById("categorias");
 const lista         = document.getElementById("lista");
 const contador      = document.getElementById("contador");
 const buscador      = document.getElementById("buscador");
-const selProvincia  = document.getElementById("f-provincia");
 const selOrden      = document.getElementById("f-orden");
 
-let categoriaActiva = "todas"; // estado: qué categoría está seleccionada
+let categoriaActiva = "todos";
 
-const money = (n) => "$" + n.toLocaleString("en-US");
+// Precio en colones: 2500 -> "₡2.500"
+const money = (n) => "₡" + n.toLocaleString("es-CR");
 
-// ============================================================
-//  CONSTRUIR botones de categoría y opciones de provincia
-// ============================================================
+// Botones de categoría
 CATEGORIAS.forEach((cat) => {
   const btn = document.createElement("button");
-  btn.className = "cat-btn" + (cat.id === "todas" ? " activa" : "");
+  btn.className = "cat-btn" + (cat.id === "todos" ? " activa" : "");
   btn.textContent = `${cat.icono} ${cat.nombre}`;
-  btn.dataset.cat = cat.id;
   btn.addEventListener("click", () => {
     categoriaActiva = cat.id;
     document.querySelectorAll(".cat-btn").forEach((b) => b.classList.remove("activa"));
@@ -78,67 +68,54 @@ CATEGORIAS.forEach((cat) => {
   navCategorias.appendChild(btn);
 });
 
-PROVINCIAS.forEach((p) => {
-  const o = document.createElement("option");
-  o.value = p; o.textContent = p;
-  selProvincia.appendChild(o);
-});
-
 // ============================================================
-//  RENDER — aplica categoría + filtros + orden, y dibuja
+//  RENDER
 // ============================================================
 function render() {
   const texto = buscador.value.toLowerCase().trim();
-  const prov  = selProvincia.value;
 
-  let resultado = items.filter((it) => {
-    if (categoriaActiva !== "todas" && it.categoria !== categoriaActiva) return false;
-    if (prov && it.provincia !== prov) return false;
-    if (texto && !(`${it.titulo} ${it.canton} ${it.provincia}`.toLowerCase().includes(texto))) return false;
+  let res = items.filter((it) => {
+    if (categoriaActiva !== "todos" && it.categoria !== categoriaActiva) return false;
+    if (texto && !(`${it.nombre} ${it.desc}`.toLowerCase().includes(texto))) return false;
     return true;
   });
 
-  // Ordenamiento
-  if (selOrden.value === "precio-asc") resultado.sort((a, b) => a.precio - b.precio);
-  if (selOrden.value === "precio-desc") resultado.sort((a, b) => b.precio - a.precio);
+  if (selOrden.value === "precio-asc") res.sort((a, b) => a.precio - b.precio);
+  if (selOrden.value === "precio-desc") res.sort((a, b) => b.precio - a.precio);
 
-  contador.textContent = `${resultado.length} resultado${resultado.length === 1 ? "" : "s"}`;
+  contador.textContent = `${res.length} shot${res.length === 1 ? "" : "s"} disponible${res.length === 1 ? "" : "s"}`;
 
-  if (resultado.length === 0) {
-    lista.innerHTML = `<p class="vacio">NADA POR AQUÍ.<br>Probá otra categoría o quitá filtros.</p>`;
+  if (res.length === 0) {
+    lista.innerHTML = `<p class="vacio">No encontramos shots con ese criterio. Probá otra categoría.</p>`;
     return;
   }
 
-  lista.innerHTML = resultado
-    .map(
-      (it) => `
+  lista.innerHTML = res
+    .map((it) => {
+      // Mensaje de WhatsApp pre-escrito para el pedido
+      const msg = encodeURIComponent(`¡Hola RunShot CR! 🏃 Quiero pedir el shot "${it.nombre}" (${money(it.precio)}).`);
+      return `
       <article class="tarjeta">
         <div class="tarjeta-foto">
-          <img src="${it.foto}" alt="${it.titulo}" loading="lazy" />
-          <span class="badge">${it.categoria}</span>
+          <img src="${it.foto}" alt="${it.nombre}" loading="lazy" />
+          <span class="badge">${NOMBRE_CAT[it.categoria]}</span>
+          <span class="tamano">60 ml</span>
         </div>
         <div class="tarjeta-cuerpo">
-          <h2>${it.titulo}</h2>
-          <p class="ubicacion">📍 ${it.canton}, ${it.provincia}</p>
-          <p class="precio">${money(it.precio)}<span> / ${it.unidad}</span></p>
-          <div class="especificaciones">
-            ${it.specs.map((s) => `<span>${s}</span>`).join("")}
-          </div>
+          <h2>${it.nombre}</h2>
+          <p class="desc">${it.desc}</p>
+          <div class="ingredientes">${it.ingredientes.map((i) => `<span>${i}</span>`).join("")}</div>
+          <p class="precio">${money(it.precio)}</p>
           <div class="contacto">
-            <a href="${it.contacto}" target="_blank" rel="noopener">Contactar</a>
+            <a href="https://wa.me/${WHATSAPP}?text=${msg}" target="_blank" rel="noopener">🟢 Pedir por WhatsApp</a>
           </div>
         </div>
-      </article>`
-    )
+      </article>`;
+    })
     .join("");
 }
 
-// ============================================================
-//  EVENTOS de filtros
-// ============================================================
 buscador.addEventListener("input", render);
-selProvincia.addEventListener("change", render);
 selOrden.addEventListener("change", render);
 
-// ARRANQUE
 render();

@@ -3,36 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AlquilaCR — Alquilá de todo en Costa Rica</title>
+  <title>RunShot CR — Shots de salud y energía para corredores</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=4" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=7" />
 </head>
 
 <body>
   <header class="site-header">
     <div class="header-top">
-      <div class="logo">ALQUILA<span>CR</span></div>
-      <!-- Zona de cuenta: auth.js la llena con el botón o el usuario. -->
+      <div class="logo">Run<span>Shot</span> <em>CR</em></div>
       <div id="auth-zona" class="auth-zona"></div>
     </div>
-    <p class="tagline">Casas, vehículos, maquinaria, equipo para eventos y más — todo en un solo lugar.</p>
+    <div class="hero">
+      <h1>Shots de salud y energía para corredores 🏃‍♂️</h1>
+      <p>Botellitas de 60 ml, cold-pressed, hechas en Costa Rica. Energía antes, recuperación después.</p>
+    </div>
   </header>
 
-  <!-- ====== CATEGORÍAS (la navegación principal) ======
-       Son el centro de la experiencia. Grandes y claras. -->
+  <!-- Categorías por momento del corredor -->
   <nav class="categorias" id="categorias" aria-label="Categorías"></nav>
 
   <main>
-    <!-- ====== FILTROS (compactos, en una sola fila discreta) ====== -->
     <section class="barra-filtros" aria-label="Filtros">
-      <input type="search" id="buscador" placeholder="🔎 Buscar…" aria-label="Buscar" />
-      <select id="f-provincia" aria-label="Provincia">
-        <option value="">Toda Costa Rica</option>
-      </select>
+      <input type="search" id="buscador" placeholder="🔎 Buscar shot…" aria-label="Buscar" />
       <select id="f-orden" aria-label="Ordenar">
-        <option value="recientes">Más recientes</option>
+        <option value="recientes">Destacados</option>
         <option value="precio-asc">Precio: menor a mayor</option>
         <option value="precio-desc">Precio: mayor a menor</option>
       </select>
@@ -41,14 +38,19 @@
     <p id="contador" class="contador" aria-live="polite"></p>
 
     <section id="lista" class="grid" aria-live="polite"></section>
+
+    <p class="disclaimer">
+      * Los shots son suplementos de bienestar dentro de una dieta equilibrada.
+      No curan enfermedades ni reemplazan tratamiento médico. Si tomás medicamentos
+      o tenés alguna condición, consultá a tu médico.
+    </p>
   </main>
 
   <footer class="site-footer">
-    <p>© 2026 ALQUILACR · Práctica de desarrollo web · Hecho en Costa Rica 🇨🇷</p>
+    <p>© 2026 RUNSHOT CR · Hecho en Costa Rica 🇨🇷 · Pedí por WhatsApp</p>
   </footer>
 
-  <!-- ====== MODAL DE CUENTA (registro / login) ======
-       Oculto por defecto; auth.js le agrega la clase "abierto". -->
+  <!-- MODAL DE CUENTA (registro / login) -->
   <div id="auth-modal" class="auth-modal" role="dialog" aria-modal="true">
     <div class="auth-caja">
       <button id="auth-cerrar" class="auth-cerrar" type="button" aria-label="Cerrar">✕</button>
@@ -65,10 +67,9 @@
     </div>
   </div>
 
-  <!-- supabase-js: el cliente que habla con el backend (desde el CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script src="config.js?v=1"></script>
   <script src="auth.js?v=1" defer></script>
-  <script src="app.js?v=4" defer></script>
+  <script src="app.js?v=7" defer></script>
 </body>
 </html>
