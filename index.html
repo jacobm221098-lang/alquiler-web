@@ -7,15 +7,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=3" />
+  <link rel="stylesheet" href="styles.css?v=4" />
 </head>
 
 <body>
   <header class="site-header">
     <div class="header-top">
       <div class="logo">ALQUILA<span>CR</span></div>
-      <!-- CTA de cuenta: por ahora explica que llega en la Fase 2 (backend). -->
-      <button id="btn-cuenta" class="btn-cuenta" type="button">Publicá tu alquiler</button>
+      <!-- Zona de cuenta: auth.js la llena con el botón o el usuario. -->
+      <div id="auth-zona" class="auth-zona"></div>
     </div>
     <p class="tagline">Casas, vehículos, maquinaria, equipo para eventos y más — todo en un solo lugar.</p>
   </header>
@@ -47,6 +47,28 @@
     <p>© 2026 ALQUILACR · Práctica de desarrollo web · Hecho en Costa Rica 🇨🇷</p>
   </footer>
 
-  <script src="app.js?v=3" defer></script>
+  <!-- ====== MODAL DE CUENTA (registro / login) ======
+       Oculto por defecto; auth.js le agrega la clase "abierto". -->
+  <div id="auth-modal" class="auth-modal" role="dialog" aria-modal="true">
+    <div class="auth-caja">
+      <button id="auth-cerrar" class="auth-cerrar" type="button" aria-label="Cerrar">✕</button>
+      <h2 id="auth-titulo">Crear cuenta</h2>
+      <form id="auth-form">
+        <label for="auth-email">Correo</label>
+        <input type="email" id="auth-email" required autocomplete="email" />
+        <label for="auth-pass">Contraseña</label>
+        <input type="password" id="auth-pass" required minlength="6" autocomplete="current-password" />
+        <button id="auth-submit" type="submit">Registrarme</button>
+      </form>
+      <p id="auth-msg" class="auth-msg" aria-live="polite"></p>
+      <button id="auth-toggle" class="auth-toggle" type="button">¿Ya tenés cuenta? <b>Iniciá sesión</b></button>
+    </div>
+  </div>
+
+  <!-- supabase-js: el cliente que habla con el backend (desde el CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="config.js?v=1"></script>
+  <script src="auth.js?v=1" defer></script>
+  <script src="app.js?v=4" defer></script>
 </body>
 </html>

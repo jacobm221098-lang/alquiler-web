@@ -232,3 +232,80 @@ main { max-width: 1180px; margin: 0 auto; padding: 0 1.2rem 4rem; }
   font-size: 0.82rem;
   margin-top: 2rem;
 }
+
+/* ============ ZONA DE CUENTA + MODAL ============ */
+.auth-zona { display: flex; align-items: center; gap: 0.6rem; }
+.auth-email {
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  font-size: 0.85rem;
+  background: var(--tinta);
+  color: var(--amarillo);
+  padding: 0.35rem 0.6rem;
+  border: 2px solid var(--tinta);
+}
+
+/* Fondo oscuro del modal (oculto por defecto) */
+.auth-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 18, 16, 0.6);
+  z-index: 100;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+.auth-modal.abierto { display: flex; }
+
+.auth-caja {
+  position: relative;
+  background: var(--cemento-claro);
+  border: var(--borde);
+  box-shadow: var(--sombra);
+  padding: 2rem 1.6rem 1.6rem;
+  width: 100%;
+  max-width: 400px;
+}
+.auth-caja h2 { font-family: "Archivo Black", sans-serif; font-size: 1.5rem; margin-bottom: 1.2rem; }
+.auth-cerrar {
+  position: absolute;
+  top: 0.6rem; right: 0.6rem;
+  background: var(--tinta);
+  color: var(--amarillo);
+  border: none;
+  width: 32px; height: 32px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.auth-caja form { display: flex; flex-direction: column; gap: 0.4rem; }
+.auth-caja label { font-family: "Space Mono", monospace; font-weight: 700; font-size: 0.82rem; margin-top: 0.6rem; }
+.auth-caja input {
+  border: 2px solid var(--tinta);
+  background: var(--cemento);
+  padding: 0.6rem 0.7rem;
+  font-size: 1rem;
+}
+.auth-caja input:focus { outline: 2px solid var(--amarillo-2); }
+#auth-submit {
+  margin-top: 1.1rem;
+  background: var(--tinta);
+  color: var(--amarillo);
+  border: var(--borde);
+  box-shadow: var(--sombra-sm);
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+#auth-submit:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--tinta); }
+.auth-msg { font-family: "Space Mono", monospace; font-size: 0.85rem; margin-top: 0.8rem; min-height: 1.2em; }
+.auth-toggle {
+  background: none; border: none;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+  color: var(--tinta);
+}

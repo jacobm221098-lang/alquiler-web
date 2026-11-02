@@ -56,7 +56,6 @@ const contador      = document.getElementById("contador");
 const buscador      = document.getElementById("buscador");
 const selProvincia  = document.getElementById("f-provincia");
 const selOrden      = document.getElementById("f-orden");
-const btnCuenta     = document.getElementById("btn-cuenta");
 
 let categoriaActiva = "todas"; // estado: qué categoría está seleccionada
 
@@ -140,12 +139,6 @@ function render() {
 buscador.addEventListener("input", render);
 selProvincia.addEventListener("change", render);
 selOrden.addEventListener("change", render);
-
-// El botón de cuenta es un PLACEHOLDER honesto: las cuentas reales
-// necesitan backend (Fase 2 con Supabase). Por ahora avisa eso.
-btnCuenta.addEventListener("click", () => {
-  alert("🚧 Próximamente: cuentas de usuario, publicar tu propio alquiler, chat y notificaciones.\n\nEsto necesita un 'backend' (base de datos). Es la Fase 2 del proyecto.");
-});
 
 // ARRANQUE
 render();
