@@ -1,0 +1,178 @@
+/* ============================================================
+   VARIABLES (:root)
+   Son "constantes" de diseño. Definís un color UNA vez y lo
+   reusás en todo lado con var(--nombre). Cambiás el color de la
+   marca aquí y se actualiza toda la página. (Un dato, un lugar.)
+   ============================================================ */
+:root {
+  --color-marca: #1f6feb;      /* azul principal */
+  --color-texto: #1a1a1a;
+  --color-suave: #667085;      /* texto secundario, gris */
+  --color-fondo: #f6f7f9;
+  --color-tarjeta: #ffffff;
+  --sombra: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.06);
+  --radio: 14px;               /* esquinas redondeadas */
+}
+
+/* Reset mínimo: quita márgenes raros por defecto del navegador y hace que
+   padding/borde NO agranden los elementos (box-sizing). Da control predecible. */
+*,
+*::before,
+*::after {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--color-texto);
+  background: var(--color-fondo);
+  line-height: 1.5;
+}
+
+/* -------- Encabezado -------- */
+.site-header {
+  background: var(--color-marca);
+  color: white;
+  padding: 2.5rem 1rem;
+  text-align: center;
+}
+.site-header h1 {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+.site-header p {
+  opacity: 0.9;
+  margin-top: 0.25rem;
+}
+
+/* main centrado con un ancho máximo cómodo de leer. "margin: auto" lo centra. */
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+/* -------- Buscador -------- */
+.filtros {
+  margin-bottom: 1.5rem;
+}
+#buscador {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #d0d5dd;
+  border-radius: var(--radio);
+  background: var(--color-tarjeta);
+}
+#buscador:focus {
+  outline: 2px solid var(--color-marca);
+  border-color: var(--color-marca);
+}
+
+/* ============================================================
+   GRID RESPONSIVE — la magia de que se adapte al celular
+   repeat(auto-fill, minmax(280px, 1fr)) significa:
+   "meté tantas columnas de MÍNIMO 280px como quepan; si no caben,
+   bajan a una sola columna". Sin media queries manuales. Pura
+   matemática de CSS Grid.
+   ============================================================ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+/* -------- Tarjeta de propiedad -------- */
+.tarjeta {
+  background: var(--color-tarjeta);
+  border-radius: var(--radio);
+  overflow: hidden;              /* recorta la foto a las esquinas redondeadas */
+  box-shadow: var(--sombra);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.tarjeta:hover {
+  transform: translateY(-3px);   /* se levanta un poco al pasar el mouse */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.tarjeta img {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;             /* la foto llena el espacio sin deformarse */
+  display: block;
+}
+
+.tarjeta-cuerpo {
+  padding: 1rem 1.1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;                       /* empuja el contacto hacia abajo */
+}
+
+.tarjeta h2 {
+  font-size: 1.15rem;
+}
+
+.ubicacion {
+  color: var(--color-suave);
+  font-size: 0.9rem;
+}
+
+.precio {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-marca);
+}
+.precio span {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-suave);
+}
+
+/* Fila de datos (hab / baños / m²). flex + gap los pone en línea. */
+.especificaciones {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: var(--color-suave);
+  border-top: 1px solid #eef0f3;
+  padding-top: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.contacto {
+  margin-top: auto;              /* se pega al fondo de la tarjeta */
+  padding-top: 0.75rem;
+}
+.contacto a {
+  display: inline-block;
+  background: var(--color-marca);
+  color: white;
+  text-decoration: none;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.contacto a:hover {
+  filter: brightness(0.92);
+}
+
+/* Mensaje cuando la búsqueda no encuentra nada. */
+.vacio {
+  grid-column: 1 / -1;           /* ocupa todas las columnas */
+  text-align: center;
+  color: var(--color-suave);
+  padding: 2rem;
+}
+
+.site-footer {
+  text-align: center;
+  color: var(--color-suave);
+  padding: 2rem 1rem;
+  font-size: 0.85rem;
+}
