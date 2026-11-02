@@ -1,178 +1,281 @@
 /* ============================================================
-   VARIABLES (:root)
-   Son "constantes" de diseño. Definís un color UNA vez y lo
-   reusás en todo lado con var(--nombre). Cambiás el color de la
-   marca aquí y se actualiza toda la página. (Un dato, un lugar.)
+   PALETA — tema oscuro futurista
+   Base: azul profundo/carbón (confianza + premium, según la
+   industria de bienes raíces). Acento: cian eléctrico (el toque
+   futurista). Regla: una base neutra + UN acento fuerte.
    ============================================================ */
 :root {
-  --color-marca: #1f6feb;      /* azul principal */
-  --color-texto: #1a1a1a;
-  --color-suave: #667085;      /* texto secundario, gris */
-  --color-fondo: #f6f7f9;
-  --color-tarjeta: #ffffff;
-  --sombra: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.06);
-  --radio: 14px;               /* esquinas redondeadas */
+  --fondo:        #0a0e1a;   /* azul casi negro, el lienzo */
+  --fondo-2:      #0f1628;
+  --vidrio:       rgba(255, 255, 255, 0.06);  /* tarjetas "de vidrio" */
+  --vidrio-borde: rgba(255, 255, 255, 0.12);
+  --acento:       #38e8ff;   /* cian eléctrico (botones, precios) */
+  --acento-2:     #6c7bff;   /* violeta-azul para degradados */
+  --texto:        #eaf0ff;   /* casi blanco */
+  --texto-suave:  #95a3c4;   /* gris azulado para datos secundarios */
+  --ok:           #3ddc97;
+  --radio:        18px;
 }
 
-/* Reset mínimo: quita márgenes raros por defecto del navegador y hace que
-   padding/borde NO agranden los elementos (box-sizing). Da control predecible. */
-*,
-*::before,
-*::after {
-  margin: 0;
-  box-sizing: border-box;
-}
+*, *::before, *::after { margin: 0; box-sizing: border-box; }
 
 body {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  color: var(--color-texto);
-  background: var(--color-fondo);
-  line-height: 1.5;
+  font-family: "Inter", system-ui, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  line-height: 1.55;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
 }
 
-/* -------- Encabezado -------- */
-.site-header {
-  background: var(--color-marca);
-  color: white;
-  padding: 2.5rem 1rem;
-  text-align: center;
+/* -------- Auroras de fondo (decoración futurista) --------
+   Dos círculos borrosos de color que flotan detrás de todo.
+   filter: blur() los convierte en manchas suaves de luz. */
+.aurora {
+  position: fixed;
+  width: 520px; height: 520px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.5;
+  z-index: -1;
+  pointer-events: none;
 }
-.site-header h1 {
-  font-size: 2rem;
+.aurora-1 { background: var(--acento);   top: -180px; left: -120px; }
+.aurora-2 { background: var(--acento-2); bottom: -200px; right: -120px; }
+
+/* ============ ENCABEZADO ============ */
+.site-header {
+  text-align: center;
+  padding: 3rem 1rem 1.5rem;
+}
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
   letter-spacing: -0.02em;
 }
-.site-header p {
-  opacity: 0.9;
-  margin-top: 0.25rem;
+.logo-icon {
+  color: var(--acento);
+  text-shadow: 0 0 18px var(--acento);   /* brillo neón */
+}
+.logo-texto strong { color: var(--acento); }
+.tagline {
+  color: var(--texto-suave);
+  margin-top: 0.5rem;
+  font-size: 1.05rem;
 }
 
-/* main centrado con un ancho máximo cómodo de leer. "margin: auto" lo centra. */
 main {
-  max-width: 1100px;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 1.5rem 1rem 3rem;
+  padding: 1rem 1.1rem 4rem;
 }
 
-/* -------- Buscador -------- */
-.filtros {
-  margin-bottom: 1.5rem;
-}
-#buscador {
-  width: 100%;
-  padding: 0.85rem 1rem;
-  font-size: 1rem;
-  border: 1px solid #d0d5dd;
+/* ============ PANEL DE FILTROS (glassmorphism) ============
+   "Vidrio esmerilado": fondo semitransparente + backdrop-filter:blur
+   hace que se vea el fondo difuminado a través del panel. Muy usado
+   en interfaces modernas/futuristas. */
+.panel-filtros {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.1rem;
+  align-items: end;
+  background: var(--vidrio);
+  border: 1px solid var(--vidrio-borde);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-radius: var(--radio);
-  background: var(--color-tarjeta);
-}
-#buscador:focus {
-  outline: 2px solid var(--color-marca);
-  border-color: var(--color-marca);
+  padding: 1.4rem;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
 }
 
-/* ============================================================
-   GRID RESPONSIVE — la magia de que se adapte al celular
-   repeat(auto-fill, minmax(280px, 1fr)) significa:
-   "meté tantas columnas de MÍNIMO 280px como quepan; si no caben,
-   bajan a una sola columna". Sin media queries manuales. Pura
-   matemática de CSS Grid.
-   ============================================================ */
+.filtro { display: flex; flex-direction: column; gap: 0.45rem; }
+
+/* Etiquetas grandes y claras = intuitivo para cualquiera. */
+.filtro label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+}
+
+/* Controles grandes (fáciles de tocar en celular o para quien no es experto) */
+.filtro select,
+.filtro input[type="range"] {
+  width: 100%;
+  font-size: 1rem;
+}
+.filtro select {
+  appearance: none;
+  background: var(--fondo-2);
+  color: var(--texto);
+  border: 1px solid var(--vidrio-borde);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  /* flechita hecha con un SVG embebido */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2395a3c4' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+}
+.filtro select:disabled { opacity: 0.5; cursor: not-allowed; }
+.filtro select:focus { outline: 2px solid var(--acento); border-color: var(--acento); }
+
+/* Barra de precio (slider) estilizada */
+.filtro-precio { grid-column: 1 / -1; }
+input[type="range"] {
+  -webkit-appearance: none;
+  height: 8px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--acento), var(--acento-2));
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--texto);
+  border: 3px solid var(--acento);
+  box-shadow: 0 0 12px var(--acento);
+}
+#f-precio-valor { color: var(--acento); font-weight: 700; }
+
+.btn-limpiar {
+  background: transparent;
+  color: var(--texto-suave);
+  border: 1px solid var(--vidrio-borde);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  height: fit-content;
+  transition: all 0.15s;
+}
+.btn-limpiar:hover { color: var(--texto); border-color: var(--acento); }
+
+.contador {
+  margin: 1.6rem 0 1rem;
+  color: var(--texto-suave);
+  font-size: 0.95rem;
+}
+.contador strong { color: var(--acento); }
+
+/* ============ GRILLA DE TARJETAS ============ */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.5rem;
 }
 
-/* -------- Tarjeta de propiedad -------- */
 .tarjeta {
-  background: var(--color-tarjeta);
+  background: var(--vidrio);
+  border: 1px solid var(--vidrio-borde);
+  backdrop-filter: blur(10px);
   border-radius: var(--radio);
-  overflow: hidden;              /* recorta la foto a las esquinas redondeadas */
-  box-shadow: var(--sombra);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 .tarjeta:hover {
-  transform: translateY(-3px);   /* se levanta un poco al pasar el mouse */
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-5px);
+  border-color: var(--acento);
+  box-shadow: 0 12px 40px rgba(56, 232, 255, 0.18);
 }
 
+.tarjeta-foto { position: relative; }
 .tarjeta img {
   width: 100%;
-  height: 190px;
-  object-fit: cover;             /* la foto llena el espacio sin deformarse */
+  height: 200px;
+  object-fit: cover;
   display: block;
+}
+/* Etiqueta de provincia flotando sobre la foto */
+.badge {
+  position: absolute;
+  top: 0.8rem; left: 0.8rem;
+  background: rgba(10, 14, 26, 0.75);
+  backdrop-filter: blur(6px);
+  color: var(--acento);
+  border: 1px solid var(--vidrio-borde);
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
 }
 
 .tarjeta-cuerpo {
-  padding: 1rem 1.1rem 1.25rem;
+  padding: 1.1rem 1.2rem 1.3rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  flex: 1;                       /* empuja el contacto hacia abajo */
+  gap: 0.55rem;
+  flex: 1;
 }
-
 .tarjeta h2 {
-  font-size: 1.15rem;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
-
-.ubicacion {
-  color: var(--color-suave);
-  font-size: 0.9rem;
-}
+.ubicacion { color: var(--texto-suave); font-size: 0.9rem; }
 
 .precio {
-  font-size: 1.3rem;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.5rem;
   font-weight: 700;
-  color: var(--color-marca);
+  color: var(--acento);
+  text-shadow: 0 0 20px rgba(56, 232, 255, 0.35);
 }
-.precio span {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--color-suave);
-}
+.precio span { font-size: 0.85rem; font-weight: 500; color: var(--texto-suave); }
 
-/* Fila de datos (hab / baños / m²). flex + gap los pone en línea. */
 .especificaciones {
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.9rem;
   font-size: 0.9rem;
-  color: var(--color-suave);
-  border-top: 1px solid #eef0f3;
-  padding-top: 0.75rem;
-  margin-top: 0.25rem;
+  color: var(--texto-suave);
+  border-top: 1px solid var(--vidrio-borde);
+  padding-top: 0.8rem;
+  margin-top: 0.3rem;
 }
 
-.contacto {
-  margin-top: auto;              /* se pega al fondo de la tarjeta */
-  padding-top: 0.75rem;
-}
+.contacto { margin-top: auto; padding-top: 0.9rem; }
 .contacto a {
-  display: inline-block;
-  background: var(--color-marca);
-  color: white;
+  display: block;
+  text-align: center;
+  background: linear-gradient(90deg, var(--acento), var(--acento-2));
+  color: #04121a;
   text-decoration: none;
-  padding: 0.6rem 1rem;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 0.95rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-weight: 700;
+  transition: filter 0.15s, box-shadow 0.15s;
 }
 .contacto a:hover {
-  filter: brightness(0.92);
+  filter: brightness(1.08);
+  box-shadow: 0 0 20px rgba(56, 232, 255, 0.4);
 }
 
-/* Mensaje cuando la búsqueda no encuentra nada. */
 .vacio {
-  grid-column: 1 / -1;           /* ocupa todas las columnas */
+  grid-column: 1 / -1;
   text-align: center;
-  color: var(--color-suave);
-  padding: 2rem;
+  color: var(--texto-suave);
+  padding: 3rem 1rem;
+  border: 1px dashed var(--vidrio-borde);
+  border-radius: var(--radio);
 }
 
 .site-footer {
   text-align: center;
-  color: var(--color-suave);
+  color: var(--texto-suave);
   padding: 2rem 1rem;
   font-size: 0.85rem;
+}
+
+/* En pantallas chicas el botón Limpiar ocupa todo el ancho */
+@media (max-width: 640px) {
+  .btn-limpiar { grid-column: 1 / -1; }
 }

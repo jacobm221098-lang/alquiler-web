@@ -1,59 +1,76 @@
 <!DOCTYPE html>
-<!-- Le dice al navegador: "esto es HTML moderno (HTML5)". Siempre va de primero. -->
 <html lang="es">
 <head>
-  <!-- El <head> NO se ve en la página: son instrucciones y metadatos para el navegador. -->
-
-  <!-- charset: cómo interpretar los caracteres. utf-8 = soporta tildes, ñ, emojis. -->
   <meta charset="UTF-8" />
-
-  <!-- viewport: CLAVE para celulares. Le dice al móvil "usá el ancho real del
-       dispositivo", sin esto la página se ve chiquita y alejada en el teléfono. -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- El texto de la pestaña del navegador y lo que usa Google. -->
-  <title>Alquileres CR — Propiedades en renta</title>
-
-  <!-- Enlazamos nuestro archivo de diseño (CSS). "rel" dice qué tipo de relación. -->
+  <title>Alquileres CR — Encontrá tu próximo hogar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-  <!-- El <body> SÍ es todo lo visible. -->
+  <!-- Fondo decorativo: dos "auroras" de color que dan el aire futurista. -->
+  <div class="aurora aurora-1" aria-hidden="true"></div>
+  <div class="aurora aurora-2" aria-hidden="true"></div>
 
-  <!-- <header>: encabezado del sitio. Las etiquetas "semánticas" (header, main,
-       footer, section) le dan SIGNIFICADO al contenido, no solo forma. Ayudan a
-       Google y a los lectores de pantalla a entender la página. -->
   <header class="site-header">
-    <h1>Alquileres CR</h1>
-    <p>Propiedades en renta — solo alquiler</p>
+    <div class="logo">
+      <span class="logo-icon">◈</span>
+      <span class="logo-texto">Alquileres<strong>CR</strong></span>
+    </div>
+    <p class="tagline">Encontrá tu próximo hogar en alquiler — rápido y sin vueltas</p>
   </header>
 
   <main>
-    <!-- Barra de búsqueda/filtro simple. El input lo leeremos desde JavaScript. -->
-    <section class="filtros">
-      <input
-        type="search"
-        id="buscador"
-        placeholder="Buscar por ubicación o título…"
-        aria-label="Buscar propiedades"
-      />
+    <!-- ============ PANEL DE FILTROS ============
+         Cada filtro tiene su ETIQUETA grande arriba para que cualquier
+         persona entienda qué hace. Controles grandes = fáciles de tocar. -->
+    <section class="panel-filtros" aria-label="Filtros de búsqueda">
+      <div class="filtro">
+        <label for="f-provincia">Provincia</label>
+        <select id="f-provincia">
+          <option value="">Todas las provincias</option>
+        </select>
+      </div>
+
+      <div class="filtro">
+        <label for="f-canton">Cantón</label>
+        <select id="f-canton" disabled>
+          <option value="">Elegí una provincia primero</option>
+        </select>
+      </div>
+
+      <div class="filtro">
+        <label for="f-habitaciones">Habitaciones (mínimo)</label>
+        <select id="f-habitaciones">
+          <option value="0">Cualquiera</option>
+          <option value="1">1 o más</option>
+          <option value="2">2 o más</option>
+          <option value="3">3 o más</option>
+          <option value="4">4 o más</option>
+        </select>
+      </div>
+
+      <div class="filtro filtro-precio">
+        <label for="f-precio">Precio máximo: <output id="f-precio-valor">$2,500</output> / mes</label>
+        <input type="range" id="f-precio" min="400" max="2500" step="50" value="2500" />
+      </div>
+
+      <button id="limpiar" class="btn-limpiar" type="button">Limpiar filtros</button>
     </section>
 
-    <!-- AQUÍ está el truco de "datos vs presentación":
-         este contenedor está VACÍO en el HTML. JavaScript lo va a llenar con las
-         tarjetas de propiedades a partir de la lista de datos. Así el HTML no
-         repite 10 veces la misma estructura. -->
+    <p id="contador" class="contador" aria-live="polite"></p>
+
+    <!-- Contenedor que JavaScript llena con las tarjetas. -->
     <section id="lista-propiedades" class="grid" aria-live="polite"></section>
   </main>
 
   <footer class="site-footer">
-    <p>© 2026 Alquileres CR · Hecho como práctica de desarrollo web</p>
+    <p>© 2026 AlquileresCR · Práctica de desarrollo web</p>
   </footer>
 
-  <!-- Cargamos el JavaScript al FINAL del body a propósito: así el navegador ya
-       dibujó el HTML antes de ejecutar el script, y el script encuentra los
-       elementos que necesita. "defer" refuerza esa idea. -->
   <script src="app.js" defer></script>
 </body>
 </html>
