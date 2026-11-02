@@ -3,74 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alquileres CR — Encontrá tu próximo hogar</title>
+  <title>AlquilaCR — Alquilá de todo en Costa Rica</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=2" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=3" />
 </head>
 
 <body>
-  <!-- Fondo decorativo: dos "auroras" de color que dan el aire futurista. -->
-  <div class="aurora aurora-1" aria-hidden="true"></div>
-  <div class="aurora aurora-2" aria-hidden="true"></div>
-
   <header class="site-header">
-    <div class="logo">
-      <span class="logo-icon">◈</span>
-      <span class="logo-texto">Alquileres<strong>CR</strong></span>
+    <div class="header-top">
+      <div class="logo">ALQUILA<span>CR</span></div>
+      <!-- CTA de cuenta: por ahora explica que llega en la Fase 2 (backend). -->
+      <button id="btn-cuenta" class="btn-cuenta" type="button">Publicá tu alquiler</button>
     </div>
-    <p class="tagline">Encontrá tu próximo hogar en alquiler — rápido y sin vueltas</p>
+    <p class="tagline">Casas, vehículos, maquinaria, equipo para eventos y más — todo en un solo lugar.</p>
   </header>
 
+  <!-- ====== CATEGORÍAS (la navegación principal) ======
+       Son el centro de la experiencia. Grandes y claras. -->
+  <nav class="categorias" id="categorias" aria-label="Categorías"></nav>
+
   <main>
-    <!-- ============ PANEL DE FILTROS ============
-         Cada filtro tiene su ETIQUETA grande arriba para que cualquier
-         persona entienda qué hace. Controles grandes = fáciles de tocar. -->
-    <section class="panel-filtros" aria-label="Filtros de búsqueda">
-      <div class="filtro">
-        <label for="f-provincia">Provincia</label>
-        <select id="f-provincia">
-          <option value="">Todas las provincias</option>
-        </select>
-      </div>
-
-      <div class="filtro">
-        <label for="f-canton">Cantón</label>
-        <select id="f-canton" disabled>
-          <option value="">Elegí una provincia primero</option>
-        </select>
-      </div>
-
-      <div class="filtro">
-        <label for="f-habitaciones">Habitaciones (mínimo)</label>
-        <select id="f-habitaciones">
-          <option value="0">Cualquiera</option>
-          <option value="1">1 o más</option>
-          <option value="2">2 o más</option>
-          <option value="3">3 o más</option>
-          <option value="4">4 o más</option>
-        </select>
-      </div>
-
-      <div class="filtro filtro-precio">
-        <label for="f-precio">Precio máximo: <output id="f-precio-valor">$2,500</output> / mes</label>
-        <input type="range" id="f-precio" min="400" max="2500" step="50" value="2500" />
-      </div>
-
-      <button id="limpiar" class="btn-limpiar" type="button">Limpiar filtros</button>
+    <!-- ====== FILTROS (compactos, en una sola fila discreta) ====== -->
+    <section class="barra-filtros" aria-label="Filtros">
+      <input type="search" id="buscador" placeholder="🔎 Buscar…" aria-label="Buscar" />
+      <select id="f-provincia" aria-label="Provincia">
+        <option value="">Toda Costa Rica</option>
+      </select>
+      <select id="f-orden" aria-label="Ordenar">
+        <option value="recientes">Más recientes</option>
+        <option value="precio-asc">Precio: menor a mayor</option>
+        <option value="precio-desc">Precio: mayor a menor</option>
+      </select>
     </section>
 
     <p id="contador" class="contador" aria-live="polite"></p>
 
-    <!-- Contenedor que JavaScript llena con las tarjetas. -->
-    <section id="lista-propiedades" class="grid" aria-live="polite"></section>
+    <section id="lista" class="grid" aria-live="polite"></section>
   </main>
 
   <footer class="site-footer">
-    <p>© 2026 AlquileresCR · Práctica de desarrollo web</p>
+    <p>© 2026 ALQUILACR · Práctica de desarrollo web · Hecho en Costa Rica 🇨🇷</p>
   </footer>
 
-  <script src="app.js?v=2" defer></script>
+  <script src="app.js?v=3" defer></script>
 </body>
 </html>
