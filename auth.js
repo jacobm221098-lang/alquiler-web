@@ -117,10 +117,41 @@ async function enviarReset() {
 // 7) Pintar la zona de cuenta
 function pintarAuth(sesion) {
   if (sesion && sesion.user) {
+    const email = sesion.user.email;
     authZona.innerHTML = `
-      <span class="auth-email">👤 ${sesion.user.email}</span>
-      <button id="btn-salir" class="btn-cuenta" type="button">Salir</button>`;
+      <div class="user-wrap">
+        <button id="avatar-btn" class="avatar-btn" type="button" title="${email}" aria-label="Tu cuenta">👤</button>
+        <div id="user-menu" class="user-menu">
+          <div class="user-menu-email">${email}</div>
+          <button class="user-menu-item" id="mi-pubs" type="button">📋 Mis publicaciones</button>
+          <button class="user-menu-item" id="mi-cuenta" type="button">⚙️ Mi cuenta</button>
+          <button class="user-menu-item" id="btn-salir" type="button">🚪 Cerrar sesión</button>
+        </div>
+      </div>`;
+
+    const avatar = document.getElementById("avatar-btn");
+    const menu   = document.getElementById("user-menu");
+
+    // Clic en el avatar: abre/cierra el menú
+    avatar.addEventListener("click", (e) => {
+      e.stopPropagation();
+      menu.classList.toggle("abierto");
+    });
+    // Clic fuera: cierra el menú
+    document.addEventListener("click", () => menu.classList.remove("abierto"));
+    menu.addEventListener("click", (e) => e.stopPropagation());
+
+    // Opciones del menú
+    document.getElementById("mi-pubs").addEventListener("click", () => {
+      menu.classList.remove("abierto");
+      document.dispatchEvent(new CustomEvent("ver-mis-publicaciones"));
+    });
+    document.getElementById("mi-cuenta").addEventListener("click", () => {
+      menu.classList.remove("abierto");
+      alert(`Tu cuenta:\n${email}\n\n(Perfiles vendedor/comprador: próximamente)`);
+    });
     document.getElementById("btn-salir").addEventListener("click", async () => {
+      menu.classList.remove("abierto");
       await supa.auth.signOut();
     });
   } else {

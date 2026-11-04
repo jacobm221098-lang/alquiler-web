@@ -71,6 +71,7 @@ function render() {
   const prov  = selProvincia.value;
 
   let res = items.filter((it) => {
+    if (soloMias && it.user_id !== currentUserId) return false;
     if (categoriaActiva !== "todas" && it.categoria !== categoriaActiva) return false;
     if (prov && it.provincia !== prov) return false;
     if (texto && !(`${it.titulo} ${it.canton} ${it.provincia}`.toLowerCase().includes(texto))) return false;
@@ -92,6 +93,8 @@ function render() {
       ? it.contacto
       : "https://wa.me/" + (it.contacto || "50600000000");
     const specs = (it.specs || []).map((s) => `<span>${s}</span>`).join("");
+    const esMia = it.user_id && it.user_id === currentUserId;
+    const borrar = esMia ? `<button class="btn-borrar" data-id="${it.id}" type="button">🗑 Borrar</button>` : "";
     return `
       <article class="tarjeta">
         <div class="tarjeta-foto">
@@ -104,6 +107,7 @@ function render() {
           <p class="precio">${money(it.precio)}<span> / ${it.unidad}</span></p>
           <div class="especificaciones">${specs}</div>
           <div class="contacto"><a href="${link}" target="_blank" rel="noopener">Contactar</a></div>
+          ${borrar}
         </div>
       </article>`;
   }).join("");
@@ -112,6 +116,48 @@ function render() {
 buscador.addEventListener("input", render);
 selProvincia.addEventListener("change", render);
 selOrden.addEventListener("change", render);
+
+// ============================================================
+//  ESTADO de usuario + "Mis publicaciones" + borrar propias
+// ============================================================
+let currentUserId = null;
+let soloMias = false;
+const bannerMias = document.getElementById("banner-mias");
+
+if (supaClient) {
+  supaClient.auth.getSession().then(({ data }) => {
+    currentUserId = data.session?.user?.id || null;
+    render();
+  });
+  supaClient.auth.onAuthStateChange((_e, s) => {
+    currentUserId = s?.user?.id || null;
+    if (!currentUserId) { soloMias = false; bannerMias?.classList.remove("visible"); }
+    render();
+  });
+}
+
+// El menú de la cuenta (auth.js) dispara este evento
+document.addEventListener("ver-mis-publicaciones", () => {
+  if (!currentUserId) return;
+  soloMias = true;
+  bannerMias?.classList.add("visible");
+  render();
+});
+document.getElementById("ver-todo")?.addEventListener("click", () => {
+  soloMias = false;
+  bannerMias?.classList.remove("visible");
+  render();
+});
+
+// Borrar un anuncio propio (RLS solo deja borrar al dueño)
+lista.addEventListener("click", async (e) => {
+  const b = e.target.closest(".btn-borrar");
+  if (!b) return;
+  if (!confirm("¿Seguro que querés borrar este anuncio?")) return;
+  const { error } = await supaClient.from("anuncios").delete().eq("id", b.dataset.id);
+  if (error) { alert("No se pudo borrar: " + error.message); return; }
+  await cargarAnuncios();
+});
 
 // ============================================================
 //  LEER anuncios de la base de datos (Supabase)
@@ -131,6 +177,8 @@ async function cargarAnuncios() {
     return;
   }
   const deLaBD = (data || []).map((r) => ({
+    id: r.id,
+    user_id: r.user_id,
     categoria: r.categoria,
     titulo: r.titulo,
     provincia: r.provincia,
