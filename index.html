@@ -7,15 +7,18 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=9" />
+  <link rel="stylesheet" href="styles.css?v=10" />
 </head>
 
 <body>
   <header class="site-header">
     <div class="header-top">
       <div class="logo">ALQUILA<span>CR</span></div>
-      <!-- Zona de cuenta: auth.js la llena con el botón o el usuario. -->
-      <div id="auth-zona" class="auth-zona"></div>
+      <div class="header-acciones">
+        <button id="btn-publicar" class="btn-publicar" type="button">+ Publicar</button>
+        <!-- Zona de cuenta: auth.js la llena con el botón o el usuario. -->
+        <div id="auth-zona" class="auth-zona"></div>
+      </div>
     </div>
     <p class="tagline">Casas, vehículos, maquinaria, equipo para eventos y más — todo en un solo lugar.</p>
   </header>
@@ -65,10 +68,62 @@
     </div>
   </div>
 
+  <!-- ====== MODAL PUBLICAR ANUNCIO ====== -->
+  <div id="pub-modal" class="auth-modal" role="dialog" aria-modal="true">
+    <div class="auth-caja pub-caja">
+      <button id="pub-cerrar" class="auth-cerrar" type="button" aria-label="Cerrar">✕</button>
+      <h2>Publicar anuncio</h2>
+      <form id="pub-form">
+        <label for="pub-categoria">Categoría</label>
+        <select id="pub-categoria" name="categoria" required></select>
+
+        <label for="pub-titulo">Título</label>
+        <input type="text" id="pub-titulo" name="titulo" required placeholder="Ej: Apartamento 2 cuartos en Escazú" />
+
+        <div class="pub-fila">
+          <div>
+            <label for="pub-provincia">Provincia</label>
+            <select id="pub-provincia" name="provincia" required></select>
+          </div>
+          <div>
+            <label for="pub-canton">Cantón</label>
+            <input type="text" id="pub-canton" name="canton" placeholder="Ej: Escazú" />
+          </div>
+        </div>
+
+        <div class="pub-fila">
+          <div>
+            <label for="pub-precio">Precio ($)</label>
+            <input type="number" id="pub-precio" name="precio" required min="1" placeholder="850" />
+          </div>
+          <div>
+            <label for="pub-unidad">Por</label>
+            <select id="pub-unidad" name="unidad" required>
+              <option value="mes">mes</option>
+              <option value="día">día</option>
+            </select>
+          </div>
+        </div>
+
+        <label for="pub-descripcion">Descripción corta</label>
+        <input type="text" id="pub-descripcion" name="descripcion" placeholder="Ej: 2 hab, 1 baño, amueblado" />
+
+        <label for="pub-foto">Foto (URL, opcional)</label>
+        <input type="url" id="pub-foto" name="foto" placeholder="https://..." />
+
+        <label for="pub-contacto">WhatsApp (número con 506)</label>
+        <input type="text" id="pub-contacto" name="contacto" required placeholder="50688887777" />
+
+        <button type="submit">Publicar</button>
+      </form>
+      <p id="pub-msg" class="auth-msg" aria-live="polite"></p>
+    </div>
+  </div>
+
   <!-- supabase-js: el cliente que habla con el backend (desde el CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-  <script src="config.js?v=1"></script>
-  <script src="auth.js?v=1" defer></script>
-  <script src="app.js?v=9" defer></script>
+  <script src="config.js?v=2"></script>
+  <script src="auth.js?v=2" defer></script>
+  <script src="app.js?v=10" defer></script>
 </body>
 </html>

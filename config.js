@@ -12,3 +12,8 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 // ¿Ya está configurado? (lo usa el resto del código para avisar si falta)
 const SUPABASE_LISTO =
   !SUPABASE_URL.includes("TU-PROYECTO") && !SUPABASE_ANON_KEY.includes("TU_ANON_KEY");
+
+// Cliente COMPARTIDO: un solo "teléfono" a Supabase que usan auth.js y app.js.
+const supaClient = SUPABASE_LISTO
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;

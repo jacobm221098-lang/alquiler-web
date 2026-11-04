@@ -4,12 +4,8 @@
 //  cerrar sesión, y mostrar quién está conectado.
 // ============================================================
 
-// 1) Creamos el "cliente" de Supabase: el objeto por el que le
-//    hablamos al backend. Solo si ya configuraste las claves.
-let supa = null;
-if (SUPABASE_LISTO) {
-  supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-}
+// 1) Usamos el cliente COMPARTIDO definido en config.js.
+const supa = supaClient;
 
 // 2) Referencias al DOM
 const authZona   = document.getElementById("auth-zona");

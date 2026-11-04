@@ -309,3 +309,46 @@ main { max-width: 1180px; margin: 0 auto; padding: 0 1.2rem 4rem; }
   text-decoration: underline;
   color: var(--tinta);
 }
+
+/* ============ BOTÓN PUBLICAR + FORMULARIO ============ */
+.header-acciones { display: flex; align-items: center; gap: 0.6rem; }
+.btn-publicar {
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  background: var(--tinta);
+  color: var(--amarillo);
+  border: var(--borde);
+  box-shadow: var(--sombra-sm);
+  padding: 0.65rem 1.1rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.btn-publicar:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--tinta); }
+
+/* El modal de publicar reutiliza .auth-caja; lo hacemos un poco más ancho
+   y con scroll por si el formulario es largo en pantallas chicas. */
+.pub-caja { max-width: 460px; max-height: 90vh; overflow-y: auto; }
+.auth-caja select {
+  border: 2px solid var(--tinta);
+  background: var(--cemento);
+  padding: 0.6rem 0.7rem;
+  font-size: 1rem;
+  font-family: "Inter", sans-serif;
+}
+.auth-caja select:focus { outline: 2px solid var(--amarillo-2); }
+.pub-fila { display: flex; gap: 0.7rem; }
+.pub-fila > div { flex: 1; display: flex; flex-direction: column; gap: 0.3rem; }
+#pub-form button[type="submit"] {
+  margin-top: 1.1rem;
+  background: var(--amarillo);
+  color: var(--tinta);
+  border: var(--borde);
+  box-shadow: var(--sombra-sm);
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  padding: 0.8rem;
+  cursor: pointer;
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+#pub-form button[type="submit"]:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--tinta); }
