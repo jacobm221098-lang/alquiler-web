@@ -149,6 +149,19 @@ document.getElementById("ver-todo")?.addEventListener("click", () => {
   render();
 });
 
+// La UI se adapta al rol: el comprador NO ve "+ Publicar".
+document.addEventListener("rol-cambiado", (e) => {
+  const { rol, logueado } = e.detail;
+  const ocultarPublicar = logueado && rol === "comprador";
+  if (btnPublicar) btnPublicar.style.display = ocultarPublicar ? "none" : "";
+  // Si un comprador estaba viendo "mis publicaciones", lo reseteamos
+  if (ocultarPublicar && soloMias) {
+    soloMias = false;
+    bannerMias?.classList.remove("visible");
+    render();
+  }
+});
+
 // Borrar un anuncio propio (RLS solo deja borrar al dueño)
 lista.addEventListener("click", async (e) => {
   const b = e.target.closest(".btn-borrar");

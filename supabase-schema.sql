@@ -39,3 +39,18 @@ create policy "editar propio"
 create policy "borrar propio"
   on anuncios for delete
   using (auth.uid() = user_id);
+
+-- ============================================================
+--  Tabla de PERFILES (rol vendedor / comprador)
+-- ============================================================
+create table if not exists perfiles (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  rol     text not null default 'comprador' check (rol in ('comprador','vendedor')),
+  creado  timestamptz default now()
+);
+
+alter table perfiles enable row level security;
+
+create policy "ver perfiles"    on perfiles for select using (true);
+create policy "crear mi perfil" on perfiles for insert with check (auth.uid() = user_id);
+create policy "editar mi perfil" on perfiles for update using (auth.uid() = user_id);

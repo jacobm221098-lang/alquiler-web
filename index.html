@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=11" />
+  <link rel="stylesheet" href="styles.css?v=12" />
 </head>
 
 <body>
@@ -66,6 +66,13 @@
         <input type="email" id="auth-email" required autocomplete="email" />
         <label for="auth-pass">Contraseña</label>
         <input type="password" id="auth-pass" required minlength="6" autocomplete="current-password" />
+
+        <div id="rol-selector" class="rol-selector">
+          <span class="rol-titulo">¿Qué querés hacer?</span>
+          <label class="rol-op"><input type="radio" name="rol" value="comprador" checked /> 🔎 Busco alquilar</label>
+          <label class="rol-op"><input type="radio" name="rol" value="vendedor" /> 📢 Quiero publicar</label>
+        </div>
+
         <button id="auth-submit" type="submit">Registrarme</button>
       </form>
       <p id="auth-msg" class="auth-msg" aria-live="polite"></p>
@@ -129,7 +136,7 @@
   <!-- supabase-js: el cliente que habla con el backend (desde el CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script src="config.js?v=2"></script>
-  <script src="auth.js?v=4" defer></script>
-  <script src="app.js?v=11" defer></script>
+  <script src="auth.js?v=5" defer></script>
+  <script src="app.js?v=12" defer></script>
 </body>
 </html>

@@ -443,3 +443,28 @@ main { max-width: 1180px; margin: 0 auto; padding: 0 1.2rem 4rem; }
   margin-top: 0.5rem;
   width: 100%;
 }
+
+/* Selector de rol en el registro */
+.rol-selector {
+  margin-top: 0.9rem;
+  border: 2px solid var(--tinta);
+  padding: 0.7rem 0.8rem;
+  background: var(--cemento);
+}
+.rol-titulo {
+  display: block;
+  font-family: "Sora", sans-serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  margin-bottom: 0.5rem;
+}
+.rol-op {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 0.35rem 0;
+  cursor: pointer;
+}
+.user-menu-email small { font-weight: 600; opacity: 0.8; }

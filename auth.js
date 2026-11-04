@@ -1,13 +1,9 @@
 // ============================================================
-//  AUTENTICACIÓN (cuentas de usuario) con Supabase
-//  Registro, inicio de sesión, cerrar sesión, y RESETEO de
-//  contraseña (enviar correo + poner contraseña nueva).
+//  AUTENTICACIÓN + PERFILES (vendedor / comprador) con Supabase
 // ============================================================
-
-// 1) Cliente COMPARTIDO definido en config.js.
 const supa = supaClient;
 
-// 2) Referencias al DOM
+// DOM
 const authZona   = document.getElementById("auth-zona");
 const modal      = document.getElementById("auth-modal");
 const modalCerrar= document.getElementById("auth-cerrar");
@@ -21,43 +17,41 @@ const titulo     = document.getElementById("auth-titulo");
 const submitBtn  = document.getElementById("auth-submit");
 const toggle     = document.getElementById("auth-toggle");
 const reset      = document.getElementById("auth-reset");
+const rolSelector= document.getElementById("rol-selector");
 
-let modo = "registro"; // "registro" | "login" | "recuperar"
+let modo = "registro";           // "registro" | "login" | "recuperar"
+let sesionActual = null;
+let rolActual = null;            // "vendedor" | "comprador" | null
 
-// 3) Abrir / cerrar el modal
+const rolBonito = (r) => r === "vendedor" ? "Vendedor" : r === "comprador" ? "Comprador" : "Sin rol";
+
+// ---------- Modal ----------
 function abrirModal() {
-  if (!SUPABASE_LISTO) {
-    alert("⚙️ Falta conectar Supabase.\nPegá tu URL y anon key en config.js para activar las cuentas.");
-    return;
-  }
+  if (!SUPABASE_LISTO) { alert("⚙️ Falta conectar Supabase (config.js)."); return; }
   modal.classList.add("abierto");
   msg.textContent = "";
 }
 function cerrarModal() { modal.classList.remove("abierto"); }
 
-// 4) Cambiar de modo (registro / login / recuperar)
 function setModo(nuevo) {
   modo = nuevo;
   msg.textContent = "";
-
-  // En "recuperar" solo pedimos la contraseña NUEVA (no el correo).
   const esRecuperar = modo === "recuperar";
   lblEmail.style.display = esRecuperar ? "none" : "";
   inEmail.style.display  = esRecuperar ? "none" : "";
   inEmail.required = !esRecuperar;
   reset.style.display = modo === "login" ? "" : "none";
+  if (rolSelector) rolSelector.style.display = modo === "registro" ? "" : "none";
 
   if (modo === "registro") {
     titulo.textContent = "Crear cuenta";
     submitBtn.textContent = "Registrarme";
-    toggle.style.display = "";
-    toggle.innerHTML = "¿Ya tenés cuenta? <b>Iniciá sesión</b>";
+    toggle.style.display = ""; toggle.innerHTML = "¿Ya tenés cuenta? <b>Iniciá sesión</b>";
   } else if (modo === "login") {
     titulo.textContent = "Iniciar sesión";
     submitBtn.textContent = "Entrar";
-    toggle.style.display = "";
-    toggle.innerHTML = "¿Sos nuevo? <b>Creá tu cuenta</b>";
-  } else { // recuperar
+    toggle.style.display = ""; toggle.innerHTML = "¿Sos nuevo? <b>Creá tu cuenta</b>";
+  } else {
     titulo.textContent = "Nueva contraseña";
     submitBtn.textContent = "Guardar contraseña";
     lblPass.textContent = "Contraseña nueva";
@@ -65,7 +59,12 @@ function setModo(nuevo) {
   }
 }
 
-// 5) Enviar el formulario según el modo
+function rolElegido() {
+  const r = document.querySelector('input[name="rol"]:checked');
+  return r ? r.value : "comprador";
+}
+
+// ---------- Enviar formulario ----------
 async function enviar(e) {
   e.preventDefault();
   const email = inEmail.value.trim();
@@ -75,20 +74,31 @@ async function enviar(e) {
 
   try {
     if (modo === "registro") {
-      const { error } = await supa.auth.signUp({ email, password: pass });
+      const rol = rolElegido();
+      const { data, error } = await supa.auth.signUp({ email, password: pass });
       if (error) throw error;
-      msg.style.color = "green";
-      msg.textContent = "✅ ¡Listo! Revisá tu correo para confirmar la cuenta.";
+      // Guardamos el rol en la tabla "perfiles"
+      if (data.user) {
+        await supa.from("perfiles").upsert({ user_id: data.user.id, rol });
+      }
+      if (data.session) {
+        msg.style.color = "green";
+        msg.textContent = "✅ ¡Cuenta creada!";
+        setTimeout(cerrarModal, 900);
+      } else {
+        msg.style.color = "green";
+        msg.textContent = "✅ Revisá tu correo para confirmar la cuenta.";
+      }
     } else if (modo === "login") {
       const { error } = await supa.auth.signInWithPassword({ email, password: pass });
       if (error) throw error;
       cerrarModal();
-    } else { // recuperar: ya venimos con sesión de recuperación
+    } else {
       const { error } = await supa.auth.updateUser({ password: pass });
       if (error) throw error;
       msg.style.color = "green";
-      msg.textContent = "✅ ¡Contraseña actualizada! Ya estás dentro.";
-      setTimeout(cerrarModal, 1200);
+      msg.textContent = "✅ ¡Contraseña actualizada!";
+      setTimeout(cerrarModal, 1000);
     }
   } catch (err) {
     msg.style.color = "#c0392b";
@@ -96,60 +106,70 @@ async function enviar(e) {
   }
 }
 
-// 6) Mandar correo para restablecer la contraseña
 async function enviarReset() {
   const email = inEmail.value.trim();
-  if (!email) {
-    msg.style.color = "#c0392b";
-    msg.textContent = "Escribí tu correo arriba y tocá de nuevo.";
-    return;
-  }
-  msg.style.color = "var(--tinta)";
-  msg.textContent = "Enviando correo…";
-  const { error } = await supa.auth.resetPasswordForEmail(email, {
-    redirectTo: window.location.origin + window.location.pathname,
-  });
+  if (!email) { msg.style.color = "#c0392b"; msg.textContent = "Escribí tu correo arriba y tocá de nuevo."; return; }
+  msg.style.color = "var(--tinta)"; msg.textContent = "Enviando correo…";
+  const { error } = await supa.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + window.location.pathname });
   if (error) { msg.style.color = "#c0392b"; msg.textContent = "⚠️ " + error.message; return; }
   msg.style.color = "green";
-  msg.textContent = "📧 Te enviamos un correo para restablecer. Revisá spam (puede tardar).";
+  msg.textContent = "📧 Te enviamos un correo para restablecer. Revisá spam.";
 }
 
-// 7) Pintar la zona de cuenta
+// ---------- Leer el rol del usuario ----------
+async function cargarRol() {
+  rolActual = null;
+  if (sesionActual?.user && supa) {
+    const { data } = await supa.from("perfiles").select("rol").eq("user_id", sesionActual.user.id).maybeSingle();
+    rolActual = data?.rol || null;
+  }
+  pintarAuth(sesionActual);
+  // Avisamos a app.js para que adapte la UI (ej. botón Publicar)
+  document.dispatchEvent(new CustomEvent("rol-cambiado", {
+    detail: { rol: rolActual, logueado: !!sesionActual?.user },
+  }));
+}
+
+// ---------- Pintar zona de cuenta ----------
 function pintarAuth(sesion) {
   if (sesion && sesion.user) {
     const email = sesion.user.email;
+    const rolTxt = rolBonito(rolActual);
+    const itemMisPubs = rolActual !== "comprador"
+      ? `<button class="user-menu-item" id="mi-pubs" type="button">📋 Mis publicaciones</button>` : "";
     authZona.innerHTML = `
       <div class="user-wrap">
-        <button id="avatar-btn" class="avatar-btn" type="button" title="${email}" aria-label="Tu cuenta">👤</button>
+        <button id="avatar-btn" class="avatar-btn" type="button" title="${email} · ${rolTxt}" aria-label="Tu cuenta">👤</button>
         <div id="user-menu" class="user-menu">
-          <div class="user-menu-email">${email}</div>
-          <button class="user-menu-item" id="mi-pubs" type="button">📋 Mis publicaciones</button>
-          <button class="user-menu-item" id="mi-cuenta" type="button">⚙️ Mi cuenta</button>
+          <div class="user-menu-email">${email}<br><small>${rolTxt}</small></div>
+          ${itemMisPubs}
+          <button class="user-menu-item" id="mi-cuenta" type="button">⚙️ Cambiar rol</button>
           <button class="user-menu-item" id="btn-salir" type="button">🚪 Cerrar sesión</button>
         </div>
       </div>`;
 
     const avatar = document.getElementById("avatar-btn");
     const menu   = document.getElementById("user-menu");
-
-    // Clic en el avatar: abre/cierra el menú
-    avatar.addEventListener("click", (e) => {
-      e.stopPropagation();
-      menu.classList.toggle("abierto");
-    });
-    // Clic fuera: cierra el menú
+    avatar.addEventListener("click", (e) => { e.stopPropagation(); menu.classList.toggle("abierto"); });
     document.addEventListener("click", () => menu.classList.remove("abierto"));
     menu.addEventListener("click", (e) => e.stopPropagation());
 
-    // Opciones del menú
-    document.getElementById("mi-pubs").addEventListener("click", () => {
+    const miPubs = document.getElementById("mi-pubs");
+    if (miPubs) miPubs.addEventListener("click", () => {
       menu.classList.remove("abierto");
       document.dispatchEvent(new CustomEvent("ver-mis-publicaciones"));
     });
-    document.getElementById("mi-cuenta").addEventListener("click", () => {
+
+    document.getElementById("mi-cuenta").addEventListener("click", async () => {
       menu.classList.remove("abierto");
-      alert(`Tu cuenta:\n${email}\n\n(Perfiles vendedor/comprador: próximamente)`);
+      const nuevo = rolActual === "vendedor" ? "comprador" : "vendedor";
+      if (confirm(`Tu rol es "${rolTxt}". ¿Cambiarlo a "${rolBonito(nuevo)}"?`)) {
+        const { error } = await supa.from("perfiles").upsert({ user_id: sesion.user.id, rol: nuevo });
+        if (error) { alert("No se pudo cambiar el rol: " + error.message); return; }
+        cargarRol();
+      }
     });
+
     document.getElementById("btn-salir").addEventListener("click", async () => {
       menu.classList.remove("abierto");
       await supa.auth.signOut();
@@ -160,7 +180,7 @@ function pintarAuth(sesion) {
   }
 }
 
-// 8) Conectar y arrancar
+// ---------- Arranque ----------
 if (SUPABASE_LISTO) {
   setModo("registro");
   form.addEventListener("submit", enviar);
@@ -169,11 +189,11 @@ if (SUPABASE_LISTO) {
   toggle.addEventListener("click", () => setModo(modo === "registro" ? "login" : "registro"));
   reset.addEventListener("click", enviarReset);
 
-  supa.auth.getSession().then(({ data }) => pintarAuth(data.session));
+  supa.auth.getSession().then(({ data }) => { sesionActual = data.session; cargarRol(); });
   supa.auth.onAuthStateChange((evento, sesion) => {
-    // Cuando el usuario llega desde el correo de reseteo:
     if (evento === "PASSWORD_RECOVERY") { setModo("recuperar"); abrirModal(); }
-    pintarAuth(sesion);
+    sesionActual = sesion;
+    cargarRol();
   });
 } else {
   pintarAuth(null);
